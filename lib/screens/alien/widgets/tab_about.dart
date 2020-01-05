@@ -94,12 +94,15 @@ class AlienAbout extends StatelessWidget {
   }
 
   Widget _buildPhases(Alien alien) {
+    List<Widget> phases = alien.phases.map((phase) => Chip(label: Text(phase))).toList();
+    if(alien.phases.length == 8) {
+      phases = [Chip(label: Text("Any Phase"))];
+    }
     return _buildSection("Phases",
         child: Wrap(
           spacing: 5.0,
           runSpacing: 1,
-          children:
-              alien.phases.map((phase) => Chip(label: Text(phase))).toList(),
+          children: phases
         ));
   }
 
