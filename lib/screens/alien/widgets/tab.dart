@@ -1,3 +1,4 @@
+import 'package:cosmodex/screens/alien/widgets/tab_flares.dart';
 import 'package:cosmodex/screens/alien/widgets/tab_notes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,13 +18,7 @@ class TabData {
 class AlienTabInfo extends StatelessWidget {
   final List<TabData> _tabs = [
     TabData("About", AlienAbout()),
-    TabData(
-      "Flares",
-      Container(
-        alignment: Alignment.topCenter,
-        child: Text("Under development"),
-      ),
-    ),
+    TabData("Flares", AlienFlares()),
     TabData("Notes", AlienNotes()),
   ];
 

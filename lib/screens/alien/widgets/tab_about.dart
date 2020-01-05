@@ -8,13 +8,13 @@ import '../../../models/alien.dart';
 class AlienAbout extends StatelessWidget {
   Widget _buildSection(String text, {List<Widget> children, Widget child}) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Text(
-          text,
-          style:
-              TextStyle(fontSize: 16, height: 0.8, fontWeight: FontWeight.bold),
-        ),
+            text,
+            style: TextStyle(
+                fontSize: 16, height: 0.8, fontWeight: FontWeight.bold),
+          ),
         SizedBox(height: 22),
         if (child != null) child,
         if (children != null) ...children
@@ -33,6 +33,7 @@ class AlienAbout extends StatelessWidget {
   }
 
   Widget _buildPlayerAndMandatory(String player, bool mandatory) {
+    String mo = mandatory ? "Mandatory" : "Optional";
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
@@ -63,9 +64,9 @@ class AlienAbout extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _buildLabel("Mandatory"),
+                _buildLabel("Is Mandatory?"),
                 SizedBox(height: 11),
-                Text("$mandatory", style: TextStyle(height: 0.8))
+                Text("$mo", style: TextStyle(height: 0.8))
               ],
             ),
           ),
@@ -75,22 +76,31 @@ class AlienAbout extends StatelessWidget {
   }
 
   Widget _buildDescription(String description) {
-    return Text(
-      description,
-      style: TextStyle(height: 1.3),
-    );
+    return _buildSection("Power",
+        child: Text(
+          description,
+          style: TextStyle(height: 1.3),
+        ));
+  }
+
+  Widget _buildGameSetup(String setup) {
+    if (setup != null) {
+      return _buildSection("Game Setup", children: [
+        Text(setup),
+        SizedBox(height: 28),
+      ]);
+    }
+    return SizedBox.shrink();
   }
 
   Widget _buildPhases(Alien alien) {
-    return _buildSection("Phases", children: [
-      Row(
-        mainAxisSize: MainAxisSize.max,
-        children: alien.phases
-            .map((type) =>
-                Expanded(child: Text(type)))
-            .toList(),
-      ),
-    ]);
+    return _buildSection("Phases",
+        child: Wrap(
+          spacing: 5.0,
+          runSpacing: 1,
+          children:
+              alien.phases.map((phase) => Chip(label: Text(phase))).toList(),
+        ));
   }
 
   Widget _buildLore(String lore) {
@@ -109,15 +119,14 @@ class AlienAbout extends StatelessWidget {
       child: Consumer<AlienModel>(
         builder: (_, model, child) => Column(
           children: <Widget>[
+            _buildGameSetup(model.alien.game_setup),
             _buildDescription(model.alien.description),
+            SizedBox(height: 28),
+            _buildLore(model.alien.lore),
             SizedBox(height: 28),
             _buildPlayerAndMandatory(model.alien.player, model.alien.mandatory),
             SizedBox(height: 31),
             _buildPhases(model.alien),
-            SizedBox(height: 35),
-            _buildLore(model.alien.lore),
-            // SizedBox(height: 26),
-            // _buildTraining(model.alien.baseExp),
           ],
         ),
       ),

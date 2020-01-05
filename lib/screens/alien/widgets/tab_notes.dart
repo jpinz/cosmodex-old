@@ -8,7 +8,7 @@ import '../../../models/alien.dart';
 class AlienNotes extends StatelessWidget {
   Widget _buildSection(String text, {List<Widget> children, Widget child}) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Text(
           text,

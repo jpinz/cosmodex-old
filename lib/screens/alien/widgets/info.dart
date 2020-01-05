@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cosmodex/widgets/animated_slide.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,8 @@ class AlienOverallInfo extends StatefulWidget {
   _AlienOverallInfoState createState() => _AlienOverallInfoState();
 }
 
-class _AlienOverallInfoState extends State<AlienOverallInfo> with TickerProviderStateMixin {
+class _AlienOverallInfoState extends State<AlienOverallInfo>
+    with TickerProviderStateMixin {
   double textDiffLeft = 0.0;
   double textDiffTop = 0.0;
 
@@ -42,18 +44,24 @@ class _AlienOverallInfoState extends State<AlienOverallInfo> with TickerProvider
 
   @override
   void initState() {
-    _slideController = AnimationController(vsync: this, duration: Duration(milliseconds: 360));
+    _slideController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 360));
     _slideController.forward();
 
-    _rotateController = AnimationController(vsync: this, duration: Duration(milliseconds: 5000));
+    _rotateController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 5000));
     _rotateController.repeat();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final RenderBox targetTextBox = _targetTextKey.currentContext.findRenderObject();
-      final Offset targetTextPosition = targetTextBox.localToGlobal(Offset.zero);
+      final RenderBox targetTextBox =
+          _targetTextKey.currentContext.findRenderObject();
+      final Offset targetTextPosition =
+          targetTextBox.localToGlobal(Offset.zero);
 
-      final RenderBox currentTextBox = _currentTextKey.currentContext.findRenderObject();
-      final Offset currentTextPosition = currentTextBox.localToGlobal(Offset.zero);
+      final RenderBox currentTextBox =
+          _currentTextKey.currentContext.findRenderObject();
+      final Offset currentTextPosition =
+          currentTextBox.localToGlobal(Offset.zero);
 
       textDiffLeft = targetTextPosition.dx - currentTextPosition.dx;
       textDiffTop = targetTextPosition.dy - currentTextPosition.dy;
@@ -67,7 +75,8 @@ class _AlienOverallInfoState extends State<AlienOverallInfo> with TickerProvider
     if (_pageController == null) {
       AlienModel alienModel = AlienModel.of(context);
 
-      _pageController = PageController(viewportFraction: 0.6, initialPage: alienModel.index);
+      _pageController =
+          PageController(viewportFraction: 0.6, initialPage: alienModel.index);
       _pageController.addListener(() {
         int next = _pageController.page.round();
 
@@ -123,7 +132,8 @@ class _AlienOverallInfoState extends State<AlienOverallInfo> with TickerProvider
 
   Widget _buildAlienName(Alien alien) {
     final cardScrollController = Provider.of<AnimationController>(context);
-    final fadeAnimation = Tween(begin: 1.0, end: 0.0).animate(cardScrollController);
+    final fadeAnimation =
+        Tween(begin: 1.0, end: 0.0).animate(cardScrollController);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 26),
@@ -162,23 +172,31 @@ class _AlienOverallInfoState extends State<AlienOverallInfo> with TickerProvider
     );
   }
 
-    Widget _buildAlienExpansion(Alien alien) {
+  Widget _buildAlienExpansion(Alien alien) {
     final cardScrollController = Provider.of<AnimationController>(context);
-    final fadeAnimation = Tween(begin: 1.0, end: 0.0).animate(cardScrollController);
+    final fadeAnimation =
+        Tween(begin: 1.0, end: 0.0).animate(cardScrollController);
 
     return AnimatedFade(
       animation: fadeAnimation,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 26),
-        child: Column(children: <Widget>[
-          Text(alien.expansion),
-          Text("Alert Level: " + alien.alert_level)
-        ],)
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(alien.short_desc,
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(alien.expansion),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildAlienSlider(BuildContext context, Alien alien, List<Alien> aliens) {
+  Widget _buildAlienSlider(
+      BuildContext context, Alien alien, List<Alien> aliens) {
     final screenSize = MediaQuery.of(context).size;
     final cardScrollController = Provider.of<AnimationController>(context);
     final fadeAnimation = Tween(begin: 1.0, end: 0.0).animate(
@@ -204,11 +222,11 @@ class _AlienOverallInfoState extends State<AlienOverallInfo> with TickerProvider
             Align(
               alignment: Alignment.bottomCenter,
               child: Image.asset(
-                  "assets/pokeball.png",
-                  width: screenSize.height * 0.24,
-                  height: screenSize.height * 0.24,
-                  color: Colors.white.withOpacity(0.14),
-                ),
+                "assets/pokeball.png",
+                width: screenSize.height * 0.24,
+                height: screenSize.height * 0.24,
+                color: Colors.white.withOpacity(0.14),
+              ),
             ),
             PageView.builder(
               physics: BouncingScrollPhysics(),
@@ -224,7 +242,8 @@ class _AlienOverallInfoState extends State<AlienOverallInfo> with TickerProvider
                   curve: Curves.easeOutQuint,
                   padding: EdgeInsets.only(
                     top: selectedIndex == index ? 0 : screenSize.height * 0.04,
-                    bottom: selectedIndex == index ? 0 : screenSize.height * 0.04,
+                    bottom:
+                        selectedIndex == index ? 0 : screenSize.height * 0.04,
                   ),
                   child: CachedNetworkImage(
                     imageUrl: aliens[index].image,
@@ -249,11 +268,14 @@ class _AlienOverallInfoState extends State<AlienOverallInfo> with TickerProvider
     final screenSize = MediaQuery.of(context).size;
 
     final cardScrollController = Provider.of<AnimationController>(context);
-    final dottedAnimation = Tween(begin: 1.0, end: 0.0).animate(cardScrollController);
+    final dottedAnimation =
+        Tween(begin: 1.0, end: 0.0).animate(cardScrollController);
 
     final pokeSize = screenSize.width * 0.448;
-    final pokeTop = -(pokeSize / 2 - (IconTheme.of(context).size / 2 + _appBarTopPadding));
-    final pokeRight = -(pokeSize / 2 - (IconTheme.of(context).size / 2 + _appBarHorizontalPadding));
+    final pokeTop =
+        -(pokeSize / 2 - (IconTheme.of(context).size / 2 + _appBarTopPadding));
+    final pokeRight = -(pokeSize / 2 -
+        (IconTheme.of(context).size / 2 + _appBarHorizontalPadding));
 
     return [
       Positioned(
@@ -261,12 +283,12 @@ class _AlienOverallInfoState extends State<AlienOverallInfo> with TickerProvider
         right: pokeRight,
         child: AnimatedFade(
           animation: cardScrollController,
-          child:Image.asset(
-              "assets/pokeball.png",
-              width: pokeSize,
-              height: pokeSize,
-              color: Colors.white.withOpacity(0.26),
-            ),
+          child: Image.asset(
+            "assets/pokeball.png",
+            width: pokeSize,
+            height: pokeSize,
+            color: Colors.white.withOpacity(0.26),
+          ),
         ),
       )
     ];

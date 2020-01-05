@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../models/alien.dart';
 
+
+String _formattedExpansionInitials(String expansion) {
+  List<String> initials = List<String>();
+  initials = expansion.split(" ");
+  return "${initials[0][0] + initials[1][0]}";
+}
+
 String capitalizeFirstChar(String text) {
   if (text == null || text.length <= 1) {
     return text.toUpperCase();
@@ -65,23 +72,35 @@ class AlienCard extends StatelessWidget {
           color: Colors.white.withOpacity(0.14),
         ),
       ),
-      // Positioned(
-      //   bottom: 8,
-      //   right: 12,
-      //   child: Hero(
-      //     tag: alien.image,
-      //     child: CachedNetworkImage(
-      //       imageUrl: alien.image,
-      //       imageBuilder: (context, imageProvider) => Image(
-      //         image: imageProvider,
-      //         fit: BoxFit.contain,
-      //         width: itemHeight * 0.6,
-      //         height: itemHeight * 0.6,
-      //         alignment: Alignment.bottomRight,
-      //       ),
-      //     ),
-      //   ),
-      // ),
+      Positioned(
+        bottom: 8,
+        right: 12,
+        child: Hero(
+          tag: alien.image,
+          child: CachedNetworkImage(
+            imageUrl: alien.image,
+            imageBuilder: (context, imageProvider) => Image(
+              image: imageProvider,
+              fit: BoxFit.contain,
+              width: itemHeight * 0.6,
+              height: itemHeight * 0.6,
+              alignment: Alignment.bottomRight,
+            ),
+          ),
+        ),
+      ),
+      Positioned(
+        top: 10,
+        right: 14,
+        child: Text(
+          _formattedExpansionInitials(alien.expansion),
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.black.withOpacity(0.52),
+          ),
+        ),
+      ),
     ];
   }
 
